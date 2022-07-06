@@ -10,7 +10,8 @@
             $this->connection = $connection;
         }
 
-        public function getInfoUsers(){
+        public function getInfoUsers()
+        {
             $sql = "SELECT * FROM $this->tableUsers";
             $this->result = $this->connection->query($sql);
             return $this->result;

@@ -5,14 +5,16 @@ class Database
 
     public function getConnection()
     {
-        $params = require("config/db_params.php");
         $this->connection = null;
         try {
-            $this->connection = new PDO("mysql:host=" . $params['db_host'] . ";dbname=" . $params['db_name'], $params['db_user'], $params['db_password']);
-            $this->connection->exec("set names utf8");
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $exception) {
-            echo "Database could not be connected: " . $exception->getMessage();
+            $params = include_once("config/db_params.php");
+            $this->connection = mysqli_connect($params["db_host"], $params["db_user"], $params["db_password"], $params["db_name"]);
+            if (!$this->connection) {
+                die("Conexion fallida: " . mysqli_connect_error());
+            }
+        } catch (Exception $e) {
+            echo "Database could not be connected: " . $e->getMessage();
+            die();
         }
         return $this->connection;
     }
