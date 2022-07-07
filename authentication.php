@@ -2,7 +2,7 @@
     class Authentication
     {
         private $connection;
-        private $tableAuth = "usuarios";
+        private $tableAuth = "t_usuarios";
         public $user;
         public $password;
         public $result;
@@ -17,7 +17,7 @@
             $this->user = htmlspecialchars(strip_tags($this->user));
             $this->password = htmlspecialchars(strip_tags($this->password));
             $passwordEncrypt = hash('sha256',$this->password);
-            $sql = "SELECT usuario, clave FROM ".$this->tableAuth." WHERE usuario = '".$this->user."' AND clave = '".$passwordEncrypt."'";
+            $sql = "SELECT correo, clave FROM ".$this->tableAuth." WHERE correo = '".$this->user."' AND clave = '".$passwordEncrypt."'";
             $this->result = $this->connection->query($sql);
             return $this->result;
         }

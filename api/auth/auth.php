@@ -19,6 +19,7 @@ if (isset($_GET['user'], $_GET['password'])) {
     if ($item->user != null) {
         $dataUser = array(
             "authentication" => "true",
+            'token' => "TOKEN DE AUTORIZACION"
         );
 
         http_response_code(200);

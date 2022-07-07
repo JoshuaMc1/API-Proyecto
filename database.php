@@ -18,4 +18,9 @@ class Database
         }
         return $this->connection;
     }
+
+    public function closeConnection()
+    {
+        $this->connection->close();
+    }
 }

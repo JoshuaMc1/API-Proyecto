@@ -11,25 +11,36 @@ try {
     $connection = $database->getConnection();
     $products = new Products($connection);
     if (isset($_GET['id'])) {
-        $products->id = $_GET['id'];
-        $data = $products->getSingleProduct();
-        $countData = $data->num_rows;
-        $responce = array();
-        if ($countData > 0) {
-            while ($row = $data->fetch_assoc()) {
-                $responce[] = $row;
+        if (strlen($_GET['id']) > 0) {
+            $products->id = $_GET['id'];
+            $data = $products->getSingleProduct();
+            $countData = $data->num_rows;
+            $responce = array();
+            if ($countData > 0) {
+                while ($row = $data->fetch_assoc()) {
+                    $responce[] = $row;
+                }
+                http_response_code(200);
+                echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+                $database->closeConnection();
+            } else {
+                $database->closeConnection();
+                $responce = array([
+                    'Error code:' => '204',
+                    'Message: ' => 'No query content'
+                ]);
+                echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+                // http_response_code(204);
             }
-            http_response_code(200);
-            echo json_encode($responce, JSON_UNESCAPED_UNICODE);
-        } else {
+        }else {
             $responce = array([
-                'Error code:' => '204',
-                'Message: ' => 'No query content'
+                'Error code:' => '404',
+                'Message: ' => 'There are one or more required fields that are empty.'
             ]);
+            http_response_code(404);
             echo json_encode($responce, JSON_UNESCAPED_UNICODE);
-            // http_response_code(204);
         }
-    }else {
+    } else {
         $responce = array([
             'Error code:' => '404',
             'Message: ' => 'The search key is required.'
@@ -38,5 +49,5 @@ try {
         echo json_encode($responce, JSON_UNESCAPED_UNICODE);
     }
 } catch (Exception $ex) {
-    echo json_encode("Error: " . $ex->getMessage());
+    echo json_encode(["Error: " => $ex->getMessage()]);
 }
