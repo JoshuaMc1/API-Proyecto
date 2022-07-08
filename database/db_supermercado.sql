@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-07-2022 a las 23:20:10
+-- Tiempo de generación: 08-07-2022 a las 04:22:47
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -107,26 +107,28 @@ DELIMITER ;
 
 CREATE TABLE `t_categoria` (
   `id_categoria` int(11) NOT NULL,
-  `categoria` varchar(50) NOT NULL
+  `categoria` varchar(50) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `t_categoria`
 --
 
-INSERT INTO `t_categoria` (`id_categoria`, `categoria`) VALUES
-(1, 'Test'),
-(2, 'Verduras'),
-(3, 'Bebidas'),
-(4, 'Frutas'),
-(5, 'Higiene Personal'),
-(6, 'Automedicación'),
-(7, 'Alimentos Preparados'),
-(8, 'Bebidas Alcohólicas'),
-(9, 'Harinas y Pan'),
-(10, 'Confitería/Dulcería'),
-(11, 'Abarrotes'),
-(12, 'Lácteos');
+INSERT INTO `t_categoria` (`id_categoria`, `categoria`, `status`) VALUES
+(1, 'Test', 1),
+(2, 'Verduras', 1),
+(3, 'Bebidas', 1),
+(4, 'Frutas', 1),
+(5, 'Higiene Personal', 1),
+(6, 'Automedicación', 1),
+(7, 'Alimentos Preparados', 1),
+(8, 'Bebidas Alcohólicas', 1),
+(9, 'Harinas y Pan', 1),
+(10, 'Confitería/Dulcería', 1),
+(11, 'Abarrotes', 1),
+(12, 'Lácteos', 1),
+(13, 'Categoria de Prueba 2', 0);
 
 -- --------------------------------------------------------
 
@@ -321,6 +323,17 @@ CREATE TABLE `t_venta` (
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `vw_categorias`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vw_categorias` (
+`id` int(11)
+,`categoria` varchar(50)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `vw_productos`
 -- (Véase abajo para la vista actual)
 --
@@ -333,6 +346,15 @@ CREATE TABLE `vw_productos` (
 ,`categoria` varchar(50)
 ,`imagen` varchar(150)
 );
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vw_categorias`
+--
+DROP TABLE IF EXISTS `vw_categorias`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_categorias`  AS SELECT `t_categoria`.`id_categoria` AS `id`, `t_categoria`.`categoria` AS `categoria` FROM `t_categoria` WHERE `t_categoria`.`status` = '1''1'  ;
 
 -- --------------------------------------------------------
 
@@ -431,7 +453,7 @@ ALTER TABLE `t_venta`
 -- AUTO_INCREMENT de la tabla `t_categoria`
 --
 ALTER TABLE `t_categoria`
-  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `t_detalle_factura`

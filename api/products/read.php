@@ -18,9 +18,9 @@ try {
         while ($row = $data->fetch_assoc()) {
             $responce[] = $row;
         }
+        $database->closeConnection();
         http_response_code(200);
         echo json_encode($responce, JSON_UNESCAPED_UNICODE);
-        $database->closeConnection();
     } else {
         $database->closeConnection();
         $responce = array([
@@ -28,7 +28,6 @@ try {
             'Message: ' => 'No query content'
         ]);
         echo json_encode($responce, JSON_UNESCAPED_UNICODE);
-        // http_response_code(204);
     }
 } catch (Exception $ex) {
     echo json_encode(["Error: " => $ex->getMessage()]);

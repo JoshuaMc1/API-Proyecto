@@ -19,9 +19,9 @@ try {
                     "Code:" => "200",
                     "Message:" => "Registry deleted successfully."
                 ]);
+                $database->closeConnection();
                 http_response_code(200);
                 echo json_encode($responce, JSON_UNESCAPED_UNICODE);
-                $database->closeConnection();
             } else {
                 $database->closeConnection();
                 $responce = array([
@@ -32,6 +32,7 @@ try {
                 echo json_encode($responce, JSON_UNESCAPED_UNICODE);
             }
         }else {
+            $database->closeConnection();
             $responce = array([
                 'Error code:' => '404',
                 'Message: ' => 'There are one or more required fields that are empty.'
@@ -40,6 +41,7 @@ try {
             echo json_encode($responce, JSON_UNESCAPED_UNICODE);
         }
     } else {
+        $database->closeConnection();
         $responce = array([
             'Error code:' => '404',
             'Message: ' => 'The search key is required.'

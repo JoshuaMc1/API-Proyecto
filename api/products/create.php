@@ -35,9 +35,11 @@ try {
                     'Code: ' => '201',
                     'Message: ' => 'Product created successfully.'
                 ]);
+                $database->closeConnection();
                 http_response_code(201);
                 echo json_encode($responce, JSON_UNESCAPED_UNICODE);
             } else {
+                $database->closeConnection();
                 $responce = array([
                     'Code: ' => '404',
                     'Message: ' => 'An error has occurred, the product has not been created.'
@@ -46,6 +48,7 @@ try {
                 echo json_encode($responce, JSON_UNESCAPED_UNICODE);
             }
         } else {
+            $database->closeConnection();
             $responce = array([
                 'Error code:' => '404',
                 'Message: ' => 'There are one or more required fields that are empty.'
@@ -54,6 +57,7 @@ try {
             echo json_encode($responce, JSON_UNESCAPED_UNICODE);
         }
     } else {
+        $database->closeConnection();
         $responce = array([
             'Error code:' => '404',
             'Message: ' => 'An error has occurred, the mandatory fields are required.'
