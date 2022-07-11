@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-07-2022 a las 04:22:47
+-- Tiempo de generación: 11-07-2022 a las 03:20:46
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -179,11 +179,11 @@ CREATE TABLE `t_genero` (
 CREATE TABLE `t_info_usuarios` (
   `id_info` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
+  `correo` varchar(100) NOT NULL,
   `primer_nombre` varchar(50) NOT NULL,
   `segundo_nombre` varchar(50) DEFAULT NULL,
   `primer_apellido` varchar(50) NOT NULL,
   `segundo_apellido` varchar(50) DEFAULT NULL,
-  `nombre_de_usuario` varchar(50) NOT NULL,
   `telefono` varchar(50) NOT NULL,
   `edad` int(11) NOT NULL,
   `id_genero` int(11) NOT NULL,
@@ -296,8 +296,9 @@ CREATE TABLE `t_status` (
 
 CREATE TABLE `t_usuarios` (
   `id_usuario` int(11) NOT NULL,
-  `correo` varchar(150) NOT NULL,
+  `usuario` varchar(50) NOT NULL,
   `clave` varchar(100) NOT NULL,
+  `token` varchar(150) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -305,8 +306,8 @@ CREATE TABLE `t_usuarios` (
 -- Volcado de datos para la tabla `t_usuarios`
 --
 
-INSERT INTO `t_usuarios` (`id_usuario`, `correo`, `clave`, `status`) VALUES
-(1, 'joshua15mclean@gmail.com', '123456', 1);
+INSERT INTO `t_usuarios` (`id_usuario`, `usuario`, `clave`, `token`, `status`) VALUES
+(1, 'JoshuaMc1', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '776ad4ab1465f89fc0f03c180416345a24', 1);
 
 -- --------------------------------------------------------
 
