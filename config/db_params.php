@@ -3,6 +3,6 @@
         "db_host" => "localhost",
         "db_user" => "root",
         "db_password" => "",
-        "db_name" => "db_supermercado"
+        "db_name" => "db_api"
     );
 ?>

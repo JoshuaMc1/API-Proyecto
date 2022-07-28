@@ -31,6 +31,7 @@ try {
                 http_response_code(404);
                 echo json_encode($responce, JSON_UNESCAPED_UNICODE);
             }
+            
         }else {
             $database->closeConnection();
             $responce = array([

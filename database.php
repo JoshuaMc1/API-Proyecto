@@ -13,7 +13,7 @@ class Database
                 die("Conexion fallida: " . mysqli_connect_error());
             }
         } catch (Exception $e) {
-            echo "Database could not be connected: " . $e->getMessage();
+            echo json_encode(array(['message' => 'Database could not be connected: ' .$e->getMessage()]));
             die();
         }
         return $this->connection;

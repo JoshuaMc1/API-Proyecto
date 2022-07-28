@@ -29,7 +29,8 @@ class Products
     //Obtener todos los productos
     public function getProducts()
     {
-        return $this->connection->query("SELECT * FROM " . $this->viewProducts . "");
+        $this->result = $this->connection->query("SELECT * FROM " . $this->viewProducts . "");
+        return $this->result;
     }
 
     //Crear producto

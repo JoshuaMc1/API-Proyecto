@@ -13,28 +13,28 @@ try {
         $connection = $database->getConnection();
         $auth       = new Authentication($connection);
         $data       = json_decode(file_get_contents("php://input"));
-
-        /* Esto es verificar si los datos están configurados, si es así, asignará el correo electrónico
-        y la contraseña a la propiedad de correo electrónico y contraseña del objeto. Luego llamará
-        a la función de inicio de sesión en la clase de autenticación. Si el resultado no es falso,
-        cerrará la conexión e imprimira el resultado. Si el resultado es falso, cerrará la conexión y
-        mostrará un mensaje diciendo que el correo electrónico o la contraseña son incorrectos. */
+        /* Comprobando si los datos están configurados y luego asignamos el uid y el token para
+        el objeto de autenticación. Entonces está llamando al método de cierre de sesión. */
         if (isset($data)) {
-            $auth->email    = $data->email;
-            $auth->password = $data->password;
-            $result         = $auth->login();
-            if ($result != false) {
+            $auth->uid = $data->uid;
+            $auth->token = $data->token;
+
+            if ($auth->logout()) {
                 $database->closeConnection();
-                echo json_encode($result, JSON_UNESCAPED_UNICODE);
+                echo json_encode(array([
+                    'message' => 'Se a cerrado la sesión exitosamente, el token de acceso se a eliminado.'
+                ]));
             } else {
                 $database->closeConnection();
-                echo json_encode(array(['message' => 'El correo o la contraseña son incorrectos.']));
+                echo json_encode(array([
+                    'message' => 'A ocurrido un error al cerrar la sesión.'
+                ]));
             }
         } else { /* Comprobando si los datos están en formato JSON. */
             $database->closeConnection();
             echo json_encode(array(['message' => 'Debe enviar los datos en formato JSON.']));
         }
     } else echo json_encode(array(['message' => 'Metodo de solicitud no valido.']));
-} catch (Exception $ex) {
-    echo json_encode(array(["message: " => $ex->getMessage()]));
+} catch (\Exception $e) {
+    echo json_encode(array(['message' => $e->getMessage()]));
 }

@@ -4,7 +4,7 @@
         private $connection;
         private $tableUsers = "info_usuario";
         private $result;
-
+        
         public function __construct($connection)
         {
             $this->connection = $connection;
