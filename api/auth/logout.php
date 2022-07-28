@@ -13,6 +13,7 @@ try {
         $connection = $database->getConnection();
         $auth       = new Authentication($connection);
         $data       = json_decode(file_get_contents("php://input"));
+        
         /* Comprobando si los datos están configurados y luego asignamos el uid y el token para
         el objeto de autenticación. Entonces está llamando al método de cierre de sesión. */
         if (isset($data)) {

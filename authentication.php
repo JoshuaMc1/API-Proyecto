@@ -16,6 +16,12 @@ class Authentication
         $this->connection = $connection;
     }
 
+    /**
+     * Si el usuario existe, cree un token, verifique si el usuario tiene un token, si es así,
+     * actualícelo, si no, insértelo.
+     * 
+     * @return una matriz con los siguientes datos:
+     */
     public function login()
     {
         $passwordEncrypt = hash('sha256', $this->password);
@@ -37,27 +43,58 @@ class Authentication
         } else return false;
     }
 
+    /**
+     * ACTUALIZAR la tabla 'tokenPersonal' ESTABLECER la columna 'token' en nulo DONDE la columna 'uid'
+     * es igual al valor de la variable 'uid'
+     * 
+     * @return El resultado de la consulta.
+     */
     public function logout()
     {
         return mysqli_query($this->connection, "UPDATE " . $this->tablaTokenPersonal . " SET token = null WHERE uid = " . $this->uid);
     }
 
+    /**
+     * Si la tabla existe y el usuario tiene un token, devuelve 1. Si la tabla existe y el usuario no
+     * tiene un token, devuelve 0. Si la tabla no existe, devuelve falso.
+     * 
+     * @return un valor booleano.
+     */
     public function verifyPersonalToken()
     {
         if(mysqli_num_rows(mysqli_query($this->connection, "SELECT COUNT(*) FROM " . $this->tablaTokenPersonal)) > 0) return mysqli_num_rows(mysqli_query($this->connection, "SELECT * FROM " . $this->tablaTokenPersonal . " WHERE uid = " . $this->uid)) > 0 ? 1 : 0;
         else return false; 
     }
 
+    /**
+     * Toma un token y lo inserta en una tabla.
+     * 
+     * @param token El token que desea insertar en la base de datos.
+     * 
+     * @return El resultado de la consulta.
+     */
     public function insetToken($token)
     {
         return mysqli_query($this->connection, "INSERT INTO " . $this->tablaTokenPersonal . " (uid, token) VALUES('" . $this->uid . "', '" . $token . "')");
     }
 
+    /**
+     * Actualiza el token en la base de datos.
+     * 
+     * @param token el token que quiero actualizar
+     * 
+     * @return El resultado de la consulta.
+     */
     public function updateToken($token)
     {
         return mysqli_query($this->connection, "UPDATE " . $this->tablaTokenPersonal . " SET token = '".$token . "' WHERE uid = ".$this->uid);
     }
 
+    /**
+     * Crea una cadena aleatoria de 65 caracteres.
+     * 
+     * @return Una cadena aleatoria de 65 caracteres.
+     */
     public function createToken()
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
