@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-07-2022 a las 06:53:57
+-- Tiempo de generación: 29-07-2022 a las 06:10:40
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -120,8 +120,8 @@ CREATE TABLE `productos` (
 
 CREATE TABLE `restablecer_clave` (
   `id` int(11) NOT NULL,
-  `uid` int(11) NOT NULL,
-  `token` varchar(150) NOT NULL,
+  `correo` varchar(150) NOT NULL,
+  `token` int(11) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
   `status` int(1) NOT NULL DEFAULT 0 COMMENT 'Si es 0 significa que no se a restablecido si es 1  ya se restableció la contraseña'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -212,9 +212,7 @@ ALTER TABLE `productos`
 -- Indices de la tabla `restablecer_clave`
 --
 ALTER TABLE `restablecer_clave`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uid_2` (`uid`),
-  ADD KEY `uid` (`uid`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `token_personal`
@@ -228,7 +226,9 @@ ALTER TABLE `token_personal`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uid` (`uid`);
+  ADD UNIQUE KEY `uid` (`uid`),
+  ADD UNIQUE KEY `correo` (`correo`),
+  ADD UNIQUE KEY `usuario` (`usuario`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -318,12 +318,6 @@ ALTER TABLE `pedidos`
 --
 ALTER TABLE `productos`
   ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `restablecer_clave`
---
-ALTER TABLE `restablecer_clave`
-  ADD CONSTRAINT `restablecer_clave_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `usuarios` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `token_personal`
