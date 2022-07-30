@@ -6,49 +6,34 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 try {
-    require "../../database.php";
-    require "../../categories.php";
-    $database = new Database();
-    $connection = $database->getConnection();
-    $categories = new Categories($connection);
-    if (isset($_POST['id'])) {
-        if (strlen($_POST['id'])  > 0) {
-            $categories->id = $_POST['id'];
-            if ($categories->delete()) {
-                $responce = array([
-                    'Code: ' => '201',
-                    'Message: ' => 'Category deleted successfully.'
-                ]);
-                $connection->close();
-                http_response_code(201);
-                echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+    if ($_SERVER['REQUEST_METHOD'] == 'DELETE') { /* Comprobando si el método de solicitud es POST. */
+        require "../../database.php";
+        require "../../categories.php";
+        $database = new Database();
+        $connection = $database->getConnection();
+        $categories = new Categories($connection);
+        $data = json_decode(file_get_contents("php://input"));
+
+        /* Comprobando si los datos están configurados y luego está asignando la identificación a las
+        categorías y luego está eliminando la categoría. */
+        if (isset($data)) {
+            $categories->id = $data->id;
+            if ($categories->delete()){
+                $database->closeConnection();
+                echo json_encode(array([
+                    'message' => 'Categoria eliminada exitosamente.',
+                ]));
             } else {
-                $responce = array([
-                    'Code: ' => '404',
-                    'Message: ' => 'An error has occurred, the category has not been deleted.'
-                ]);
-                $connection->close();
-                http_response_code(404);
-                echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+                $database->closeConnection();
+                echo json_encode(array([
+                    'message' => 'A ocurrido un error al eliminar la categoria.'
+                ]));
             }
-        } else {
-            $connection->close();
-            $responce = array([
-                'Error code:' => '404',
-                'Message: ' => 'There are one or more required fields that are empty.'
-            ]);
-            http_response_code(404);
-            echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+        } else { /* Comprobando si los datos están en formato JSON. */
+            $database->closeConnection();
+            echo json_encode(array(['message' => 'Debe enviar los datos en formato JSON.']));
         }
-    } else {
-        $connection->close();
-        $responce = array([
-            'Error code:' => '404',
-            'Message: ' => 'An error has occurred, the mandatory fields are required.'
-        ]);
-        http_response_code(404);
-        echo json_encode($responce, JSON_UNESCAPED_UNICODE);
-    }
+    } else echo json_encode(array(['message' => 'Metodo de solicitud no valido.']));
 } catch (Exception $ex) {
-    echo json_encode(["Error: " => $ex->getMessage()]);
+    echo json_encode(array(["Error: " => $ex->getMessage()]));
 }

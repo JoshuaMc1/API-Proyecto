@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-07-2022 a las 06:10:40
+-- Tiempo de generación: 30-07-2022 a las 10:30:37
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -29,7 +29,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `categorias` (
   `id` int(11) NOT NULL,
-  `categoria` varchar(150) NOT NULL
+  `categoria` varchar(150) NOT NULL,
+  `status` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -136,7 +137,7 @@ CREATE TABLE `token_personal` (
   `id` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
   `token` varchar(255) DEFAULT NULL,
-  `fechaCreacion` timestamp NOT NULL DEFAULT current_timestamp()
+  `fechaActualizacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

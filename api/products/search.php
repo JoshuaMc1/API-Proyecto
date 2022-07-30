@@ -1,7 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, GET, DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 try {
@@ -10,44 +10,40 @@ try {
     $database = new Database();
     $connection = $database->getConnection();
     $products = new Products($connection);
-    if (isset($_GET['id'])) {
-        if (strlen($_GET['id']) > 0) {
-            $products->id = $_GET['id'];
-            $data = $products->getSingleProduct();
-            $countData = $data->num_rows;
-            $responce = array();
+    $data = json_decode(file_get_contents("php://input"));
+
+    if (isset($data)) {
+        if ($data->id != "") {
+            $products->pid = $data->id;
+            $response = $products->getSingleProduct();
+            $countData = mysqli_num_rows($response);
+
             if ($countData > 0) {
-                while ($row = $data->fetch_assoc()) {
-                    $responce[] = $row;
-                }
+                $row = mysqli_fetch_assoc($response);
+                $img = base64_encode($row['imagen_producto']);
+                $newResponse = array(
+                    'pid' => $row['pid'],
+                    'nombre' => $row['nombre'],
+                    'descripcion' => $row['descripcion'],
+                    'idCategoria' => $row['id_categoria'],
+                    'categoria' => $row['categoria'],
+                    'precio' => $row['precio'],
+                    'imagen_producto' => $img,
+                    'cantidad' => $row['cantidad'],
+                );
                 $database->closeConnection();
-                http_response_code(200);
-                echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+                echo json_encode([$newResponse]);
             } else {
                 $database->closeConnection();
-                $responce = array([
-                    'Error code:' => '204',
-                    'Message: ' => 'No query content'
-                ]);
-                echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+                echo json_encode(array(["message" => "El producto no existe"]));
             }
-        }else {
+        } else {
             $database->closeConnection();
-            $responce = array([
-                'Error code:' => '404',
-                'Message: ' => 'There are one or more required fields that are empty.'
-            ]);
-            http_response_code(404);
-            echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+            echo json_encode(array(["message" => "Es necesario el codigo del producto."]));
         }
-    } else {
+    } else { /* Comprobando si los datos están en formato JSON. */
         $database->closeConnection();
-        $responce = array([
-            'Error code:' => '404',
-            'Message: ' => 'The search key is required.'
-        ]);
-        http_response_code(404);
-        echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+        echo json_encode(array(['message' => 'Debe enviar los datos en formato JSON.']));
     }
 } catch (Exception $ex) {
     echo json_encode(["Error: " => $ex->getMessage()]);

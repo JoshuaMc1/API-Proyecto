@@ -2,10 +2,10 @@
 class Categories
 {
     private $connection;
-    private $viewCategories ="vw_categorias";
-    private $tableCategoria = "t_categoria";
+    private $tablaCategoria = "categorias";
     public $id;
     public $categoria;
+    public $result;
 
     public function __construct($connection)
     {
@@ -14,26 +14,26 @@ class Categories
 
     public function getCategories()
     {
-        return $this->connection->query("SELECT * FROM ".$this->viewCategories);
+        $this->result = mysqli_query($this->connection, "SELECT id, categoria FROM " . $this->tablaCategoria . " WHERE status = 1");
+        return $this->result;
     }
 
     public function create()
     {
         $this->categoria = htmlspecialchars(strip_tags($this->categoria));
-        $this->connection->query("INSERT INTO ".$this->tableCategoria." (categoria) VALUES ('".$this->categoria."')");
-        return $this->connection->affected_rows > 0 ? true : false;
+        return mysqli_query($this->connection, "INSERT INTO " . $this->tablaCategoria . " (categoria) VALUES ('" . $this->categoria . "')");
     }
 
     public function update()
     {
         $this->categoria = htmlspecialchars(strip_tags($this->categoria));
         $this->id = htmlspecialchars(strip_tags($this->id));
-        return $this->connection->query("UPDATE ".$this->tableCategoria." SET categoria = '".$this->categoria."' WHERE id_categoria = ".$this->id);
+        return mysqli_query($this->connection, "UPDATE " . $this->tablaCategoria." SET categoria = '".$this->categoria."' WHERE id = ".$this->id);
     }
 
     public function delete()
     {
         $this->id = htmlspecialchars(strip_tags($this->id));
-        return $this->connection->query("UPDATE ".$this->tableCategoria." SET status = '0' WHERE id_categoria = ".$this->id);
+        return mysqli_query($this->connection, "UPDATE ".$this->tablaCategoria." SET status = 0 WHERE id = " . $this->id);
     }
 }

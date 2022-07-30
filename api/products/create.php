@@ -1,70 +1,61 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, GET, DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 try {
-    require "../../database.php";
-    require "../../products.php";
-    $database = new Database();
-    $connection = $database->getConnection();
-    $products = new Products($connection);
-    $responce = array();
-    if (isset(
-        $_POST['name'],
-        $_POST['description'],
-        $_POST['unit_price'],
-        $_POST['quantity'],
-        $_POST['id_category']
-    )) {
-        if (strlen($_POST['name'] > 0 || strlen($_POST['unit_price'] > 0 ||
-            strlen($_POST['quantity'] || strlen($_POST['id_category']) > 0)))) {
-            $products->nombre = $_POST['name'];
-            $products->descripcion = $_POST['description'];
-            $products->precio_unitario = $_POST['unit_price'];
-            $products->categoria = $_POST['id_category'];
-            $products->cantidad = $_POST['quantity'];
-            if (isset($_POST['media'])) {
-                $products->imagen = $_POST['media'];
-            } else $products->imagen = null;
-            $products->idMedia = $products->uploadImage();
-            if ($products->create()) {
-                $responce = array([
-                    'Code: ' => '201',
-                    'Message: ' => 'Product created successfully.'
-                ]);
-                $database->closeConnection();
-                http_response_code(201);
-                echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+    if ($_SERVER["REQUEST_METHOD"] == "POST") { /* Comprobando si el método de solicitud es POST. */
+        require "../../database.php";
+        require "../../products.php";
+        $database = new Database();
+        $connection = $database->getConnection();
+        $products = new Products($connection);
+        $data = json_decode(file_get_contents("php://input"));
+
+        /* Esta es una validación de los datos enviados por el cliente. */
+        if (isset($data)) {
+            /* Está comprobando si los datos están configurados. */
+            if (isset($data->nombre, $data->precio, $data->idCategoria, $data->cantidad)) {
+                /* Comprobando si los datos están vacíos. */
+                if ($data->nombre != "" || $data->precio != "" || $data->idCategoria != "" || $data->cantidad != "") {
+                    $products->nombre = $data->nombre;
+                    $products->descripcion = strlen($data->descripcion) > 0 ? $data->descripcion : null;
+                    $products->precio = $data->precio;
+                    $products->categoria = $data->idCategoria;
+                    $products->cantidad = $data->cantidad;
+                    $products->imagen_producto = strlen($data->imagen) > 0 ? $data->imagen : null;
+
+                    /* Llamar al método create desde la clase de productos. */
+                    if ($products->create()) {
+                        $database->closeConnection();
+                        echo json_encode(array([
+                            'message' => 'Producto creado exitosamente.'
+                        ]));
+                    } else {
+                        $database->closeConnection();
+                        echo json_encode(array([
+                            'message' => 'A ocurrido un error al crear el producto.'
+                        ]));
+                    }
+                } else {
+                    $database->closeConnection();
+                    echo json_encode(array([
+                        'message' => 'Campos requeridos estan vacios, por favor revisar el contenido enviado corresponda con el requerido.'
+                    ]));
+                }
             } else {
                 $database->closeConnection();
-                $responce = array([
-                    'Code: ' => '404',
-                    'Message: ' => 'An error has occurred, the product has not been created.'
-                ]);
-                http_response_code(404);
-                echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+                echo json_encode(array([
+                    'message' => 'Campos requeridos no existen, por favor revisar el contenido enviado corresponda con el requerido.'
+                ]));
             }
-        } else {
+        } else { /* Comprobando si los datos están en formato JSON. */
             $database->closeConnection();
-            $responce = array([
-                'Error code:' => '404',
-                'Message: ' => 'There are one or more required fields that are empty.'
-            ]);
-            http_response_code(404);
-            echo json_encode($responce, JSON_UNESCAPED_UNICODE);
+            echo json_encode(array(['message' => 'Debe enviar los datos en formato JSON.']));
         }
-    } else {
-        $database->closeConnection();
-        $responce = array([
-            'Error code:' => '404',
-            'Message: ' => 'An error has occurred, the mandatory fields are required.'
-        ]);
-        http_response_code(404);
-        echo json_encode($responce, JSON_UNESCAPED_UNICODE);
-    }
+    } else echo json_encode(array(['message' => 'Metodo de solicitud no valido.']));
 } catch (Exception $ex) {
-    echo json_encode(["Error: " => $ex->getMessage()]);
+    echo json_encode(array(["message: " => $ex->getMessage()]));
 }
