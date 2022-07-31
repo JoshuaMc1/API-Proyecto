@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: POST, GET, DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 try {
-    if ($_SERVER['REQUEST_METHOD'] == 'DELETE') { /* Comprobando si el método de solicitud es DELETE. */
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') { /* Comprobando si el método de solicitud es POST. */
         require "../../database.php";
         require "../../products.php";
         $database = new Database();
