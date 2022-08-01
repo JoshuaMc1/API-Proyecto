@@ -20,20 +20,20 @@ try {
             $categories->categoria = $data->categoria;
             if ($categories->create()) {
                 $database->closeConnection();
-                echo json_encode(array([
+                echo json_encode(array(
                     'message' => 'Categoria creada exitosamente.',
-                ]));
+                ));
             } else {
                 $database->closeConnection();
-                echo json_encode(array([
+                echo json_encode(array(
                     'message' => 'A ocurrido un error al crear la categoria.'
-                ]));
+                ));
             }
         } else { /* Comprobando si los datos están en formato JSON. */
             $database->closeConnection();
-            echo json_encode(array(['message' => 'Debe enviar los datos en formato JSON.']));
+            echo json_encode(array('message' => 'Debe enviar los datos en formato JSON.'));
         }
-    } else echo json_encode(array(['message' => 'Metodo de solicitud no valido.']));
+    } else echo json_encode(array('message' => 'Metodo de solicitud no valido.'));
 } catch (Exception $ex) {
-    echo json_encode(array(["Error: " => $ex->getMessage()]));
+    echo json_encode(array("Error: " => $ex->getMessage()));
 }

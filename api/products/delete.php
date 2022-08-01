@@ -22,28 +22,28 @@ try {
                 /* Comprobando si el producto fue eliminado. */
                 if ($products->delete()) {
                     $database->closeConnection();
-                    echo json_encode(array([
+                    echo json_encode(array(
                         'message' => 'Producto eliminado exitosamente.'
-                    ]));
+                    ));
                 } else {
                     $database->closeConnection();
-                    echo json_encode(array([
+                    echo json_encode(array(
                         'message' => 'A occurido un error, el producto no se elimino.'
-                    ]));
+                    ));
                 }
             } else {
                 $database->closeConnection();
-                echo json_encode(array([
+                echo json_encode(array(
                     'message' => 'El campo requerido no existe o el campo esta vacio, por favor revisar el contenido enviado corresponda con el requerido.'
-                ]));
+                ));
             }
         } else { /* Comprobando si los datos están en formato JSON. */
             $database->closeConnection();
-            echo json_encode(array([
+            echo json_encode(array(
                 'message' => 'Debe enviar los datos en formato JSON.'
-            ]));
+            ));
         }
-    } else echo json_encode(array(['message' => 'Metodo de solicitud no valido.']));
+    } else echo json_encode(array('message' => 'Metodo de solicitud no valido.'));
 } catch (Exception $ex) {
     echo json_encode(["Error: " => $ex->getMessage()]);
 }

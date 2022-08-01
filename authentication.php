@@ -45,11 +45,11 @@ class Authentication
             if ($this->verifyPersonalToken()) $this->updateToken($ntoken);
             else $this->insetToken($ntoken);
 
-            return array([
+            return array(
                 'authenticated' => true,
                 'uid' => $dataUser['uid'],
                 'token' => $ntoken,
-            ]);
+            );
         } else return false;
     }
 
@@ -64,11 +64,11 @@ class Authentication
         if (mysqli_num_rows($this->result) > 0) {
             $token = $this->createToken();
             if ($this->insetToken($token)) {
-                return array([
+                return array(
                     'authenticated' => true,
                     'uid' => $this->uid,
                     'token' => $token,
-                ]);
+                );
             }
         } else return false;
     }

@@ -4,42 +4,47 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST, GET, DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
 try {
     require "../../database.php";
-    require "../../products.php";
+    require "../../users.php";
     $database = new Database();
     $connection = $database->getConnection();
-    $products = new Products($connection);
+    $users = new Users($connection);
     $data = json_decode(file_get_contents("php://input"));
 
     if (isset($data)) {
-        if ($data->id != "") {
-            $products->pid = $data->id;
-            $response = $products->getSingleProduct();
+        if ($data->uid != "") {
+            $users->uid = $data->uid;
+            $response = $users->searchUser();
             $countData = mysqli_num_rows($response);
-
+            $row = mysqli_fetch_assoc($response);
             if ($countData > 0) {
-                $row = mysqli_fetch_assoc($response);
-                $img = base64_encode($row['imagen_producto']);
+                $img = $row['perfil'] != null ? base64_encode($row['perfil']) : null;
                 $newResponse = array(
-                    'pid' => $row['pid'],
-                    'nombre' => $row['nombre'],
-                    'descripcion' => $row['descripcion'],
-                    'idCategoria' => $row['id_categoria'],
-                    'categoria' => $row['categoria'],
-                    'precio' => $row['precio'],
-                    'imagen_producto' => $img,
-                    'cantidad' => $row['cantidad'],
+                    'uid' => intval($row['uid']),
+                    'usuario' => $row['usuario'],
+                    'correo' => $row['correo'],
+                    'rol' => $row['rol'],
+                    'verificado' => $row['verificado'],
+                    'dni' => $row['dni'],
+                    'nombres' => $row['nombres'],
+                    'apellidos' => $row['apellidos'],
+                    'telefono' => $row['telefono'],
+                    'direccion' => $row['direccion'],
+                    'idGenero' => $row['id'],
+                    'genero' => $row['genero'],
+                    'perfil' => $img,
                 );
                 $database->closeConnection();
                 echo json_encode($newResponse);
             } else {
                 $database->closeConnection();
-                echo json_encode(array("message" => "El producto no existe"));
+                echo json_encode(array("message" => "El usuario no existe."));
             }
         } else {
             $database->closeConnection();
-            echo json_encode(array("message" => "Es necesario el codigo del producto."));
+            echo json_encode(array("message" => "Es necesario ingresar el codigo del usuario."));
         }
     } else { /* Comprobando si los datos están en formato JSON. */
         $database->closeConnection();

@@ -7,26 +7,31 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 try {
     require "../../database.php";
-    require "../../products.php";
+    require "../../users.php";
     $database = new Database();
     $connection = $database->getConnection();
-    $products = new Products($connection);
-    $data = $products->getProducts();
+    $users = new Users($connection);
+    $data = $users->getInfoUsers();
     $countData = mysqli_num_rows($data);
     $response = array();
 
     if ($countData > 0) { /* Comprobando si hay productos en la base de datos. */
         while ($row = mysqli_fetch_assoc($data)) { /* Un bucle que va a iterar sobre los datos que provienen de la base de datos. */
-            $img = $row['imagen_producto'] != null ? base64_encode($row['imagen_producto']) : null;
+            $img = $row['perfil'] != null ? base64_encode($row['perfil']) : null;
             $newResponse = array(
-                'pid' => intval($row['pid']),
-                'nombre' => $row['nombre'],
-                'descripcion' => $row['descripcion'],
-                'idCategoria' => intval($row['id_categoria']),
-                'categoria' => $row['categoria'],
-                'precio' => floatval($row['precio']),
-                'imagen_producto' => $img,
-                'cantidad' => intval($row['cantidad']),
+                'uid' => intval($row['uid']),
+                'usuario' => $row['usuario'],
+                'correo' => $row['correo'],
+                'rol' => $row['rol'],
+                'verificado' => $row['verificado'],
+                'dni' => $row['dni'],
+                'nombres' => $row['nombres'],
+                'apellidos' => $row['apellidos'],
+                'telefono' => $row['telefono'],
+                'direccion' => $row['direccion'],
+                'idGenero' => $row['id'],
+                'genero' => $row['genero'],
+                'perfil' => $img,
             );
             array_push($response, $newResponse);
         }
@@ -35,7 +40,7 @@ try {
     } else { /* Comprobando si no hay productos en la base de datos. */
         $database->closeConnection();
         $response = array(
-            'message: ' => 'No hay productos.'
+            'message: ' => 'No hay usuarios.'
         );
         echo json_encode($response);
     }

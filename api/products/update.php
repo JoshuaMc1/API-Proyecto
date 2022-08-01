@@ -30,32 +30,32 @@ try {
 
                     if ($products->update()) {
                         $database->closeConnection();
-                        echo json_encode(array([
+                        echo json_encode(array(
                             'message' => 'Producto actualizado exitosamente.'
-                        ]));
+                        ));
                     } else {
                         $database->closeConnection();
-                        echo json_encode(array([
+                        echo json_encode(array(
                             'message' => 'A ocurrido un error al actualizar el producto.'
-                        ]));
+                        ));
                     }
                 } else {
                     $database->closeConnection();
-                    echo json_encode(array([
+                    echo json_encode(array(
                         'message' => 'Campos requeridos estan vacios, por favor revisar el contenido enviado corresponda con el requerido.'
-                    ]));
+                    ));
                 }
             } else {
                 $database->closeConnection();
-                echo json_encode(array([
+                echo json_encode(array(
                     'message' => 'Campos requeridos no existen, por favor revisar el contenido enviado corresponda con el requerido.'
-                ]));
+                ));
             }
         } else { /* Comprobando si los datos están en formato JSON. */
             $database->closeConnection();
-            echo json_encode(array(['message' => 'Debe enviar los datos en formato JSON.']));
+            echo json_encode(array('message' => 'Debe enviar los datos en formato JSON.'));
         }
-    } else echo json_encode(array(['message' => 'Metodo de solicitud no valido.']));
+    } else echo json_encode(array('message' => 'Metodo de solicitud no valido.'));
 } catch (Exception $ex) {
-    echo json_encode(array(["Error: " => $ex->getMessage()]));
+    echo json_encode(array("Error: " => $ex->getMessage()));
 }

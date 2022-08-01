@@ -30,10 +30,10 @@ try {
         echo json_encode($response);
     } else {
         $database->closeConnection();
-        echo json_encode(array([
+        echo json_encode(array(
             "message" => "No hay registros",
-        ]));
+        ));
     }
 } catch (Exception $ex) {
-    echo json_encode(array(["Error: " => $ex->getMessage()]));
+    echo json_encode(array("Error: " => $ex->getMessage()));
 }

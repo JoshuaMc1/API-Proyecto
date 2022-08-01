@@ -22,20 +22,20 @@ try {
 
             if ($auth->logout()) {
                 $database->closeConnection();
-                echo json_encode(array([
+                echo json_encode(array(
                     'message' => 'Se a cerrado la sesión exitosamente, el token de acceso se a eliminado.'
-                ]));
+                ));
             } else {
                 $database->closeConnection();
-                echo json_encode(array([
+                echo json_encode(array(
                     'message' => 'A ocurrido un error al cerrar la sesión.'
-                ]));
+                ));
             }
         } else { /* Comprobando si los datos están en formato JSON. */
             $database->closeConnection();
-            echo json_encode(array(['message' => 'Debe enviar los datos en formato JSON.']));
+            echo json_encode(array('message' => 'Debe enviar los datos en formato JSON.'));
         }
-    } else echo json_encode(array(['message' => 'Metodo de solicitud no valido.']));
+    } else echo json_encode(array('message' => 'Metodo de solicitud no valido.'));
 } catch (\Exception $e) {
-    echo json_encode(array(['message' => $e->getMessage()]));
+    echo json_encode(array('message' => $e->getMessage()));
 }

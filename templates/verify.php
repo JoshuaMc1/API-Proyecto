@@ -12,12 +12,12 @@
     </style>
 </head>
 
-<body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #2D3047;" leftmargin="0">
-    <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#2D3047"
+<body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #40A72E;" leftmargin="0">
+    <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#40A72E"
         style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;">
         <tr>
             <td>
-                <table style="background-color: #2D3047; max-width:670px;  margin:0 auto;" width="100%" border="0"
+                <table style="background-color: #40A72E; max-width:670px;  margin:0 auto;" width="100%" border="0"
                     align="center" cellpadding="0" cellspacing="0">
                     <tr>
                         <td style="height:80px;">&nbsp;</td>
@@ -30,6 +30,10 @@
                             <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"
                                 style="max-width:670px;background:#fff; border-radius:10px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
                                 <tr>
+                                    <td style="height:20px;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td><img src="https://files.fm/thumb_show.php?i=e3mvxfum2" alt="Logo de la empresa" width="350px" height="auto"></td>
                                     <td style="height:40px;">&nbsp;</td>
                                 </tr>
                                 <tr>
@@ -52,7 +56,7 @@
                                         <br>
                                         <br>
                                         <div>
-                                            <a href="{{direccion}}" style="background: #2D3047; color: #fff; text-decoration: none; padding: 15px 25px; border-radius: 10px; font-size: 16pt;">Verificar cuenta</a>
+                                            <a href="{{Direccion}}" style="background: #40A72E; color: #fff; text-decoration: none; padding: 15px 25px; border-radius: 10px; font-size: 16pt;">Verificar cuenta</a>
                                         </div>
                                         <br>
                                         <br>

@@ -28,13 +28,13 @@ try {
                 echo json_encode($result, JSON_UNESCAPED_UNICODE);
             } else {
                 $database->closeConnection();
-                echo json_encode(array(['message' => 'El correo o la contraseña son incorrectos.']));
+                echo json_encode(array('message' => 'El correo o la contraseña son incorrectos.'));
             }
         } else { /* Comprobando si los datos están en formato JSON. */
             $database->closeConnection();
-            echo json_encode(array(['message' => 'Debe enviar los datos en formato JSON.']));
+            echo json_encode(array('message' => 'Debe enviar los datos en formato JSON.'));
         }
-    } else echo json_encode(array(['message' => 'Metodo de solicitud no valido.']));
+    } else echo json_encode(array('message' => 'Metodo de solicitud no valido.'));
 } catch (Exception $ex) {
-    echo json_encode(array(["message: " => $ex->getMessage()]));
+    echo json_encode(array("message: " => $ex->getMessage()));
 }

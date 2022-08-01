@@ -23,15 +23,15 @@ try {
             $auth->tokenReset = $data->resetCode;
             $auth->newPassword = $data->newPassword;
             if ($auth->resetPassword()) {
-                echo json_encode(array([
+                echo json_encode(array(
                     'message' => 'Contraseña restablecida exitosamente.',
-                ]));
-            } else echo json_encode(array(['message' => 'A ocurrido un error al cambiar la contraseña.']));
+                ));
+            } else echo json_encode(array('message' => 'A ocurrido un error al cambiar la contraseña.'));
         } else { /* Comprobando si los datos están en formato JSON. */
             $database->closeConnection();
-            echo json_encode(array(['message' => 'Debe enviar los datos en formato JSON.']));
+            echo json_encode(array('message' => 'Debe enviar los datos en formato JSON.'));
         }
-    } else echo json_encode(array(['message' => 'Metodo de solicitud no valido.']));
+    } else echo json_encode(array('message' => 'Metodo de solicitud no valido.'));
 } catch (\Exception $e) {
-    echo json_encode(array(["message: " => $ex->getMessage()]));
+    echo json_encode(array("message: " => $ex->getMessage()));
 }

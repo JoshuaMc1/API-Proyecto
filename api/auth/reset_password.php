@@ -19,16 +19,16 @@ try {
         if (isset($data)) {
             $auth->email = $data->email;
             if ($auth->extractDataUser()) {
-                echo json_encode(array([
+                echo json_encode(array(
                     'success' => true,
                     'to-email' => $auth->email,
-                ]));
-            } else echo json_encode(array(['message' => 'A ocurrido un error al enviar el correo.']));
+                ));
+            } else echo json_encode(array('message' => 'A ocurrido un error al enviar el correo.'));
         } else { /* Comprobando si los datos están en formato JSON. */
             $database->closeConnection();
-            echo json_encode(array(['message' => 'Debe enviar los datos en formato JSON.']));
+            echo json_encode(array('message' => 'Debe enviar los datos en formato JSON.'));
         }
-    } else echo json_encode(array(['message' => 'Metodo de solicitud no valido.']));
+    } else echo json_encode(array('message' => 'Metodo de solicitud no valido.'));
 } catch (\Exception $e) {
-    echo json_encode(array(["message: " => $ex->getMessage()]));
+    echo json_encode(array("message: " => $ex->getMessage()));
 }
